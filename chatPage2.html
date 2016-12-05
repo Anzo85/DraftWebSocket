@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+	 <title>Zorro Chat</title>
+	 <h1>Zorro <span style="color:red">Chat</span> Page </h1>
+      <script type="text/javascript">
+
+	var socket = new WebSocket("ws://localhost:9191/websockets/chat");
+  socket.onopen = function() {
+  alert("connected");
+};
+
+socket.onclose = function(event) {
+  if (event.wasClean) {
+    alert('closed');
+  } else {
+    alert('disconnect');
+  }
+  alert( event.code + event.reason);
+};
+
+socket.onmessage = function(event) {
+  alert(event.data);
+};
+
+socket.onerror = function(error) {
+  alert(error.message);
+};
+
+function send(){
+
+    var msg = {
+      Type: "chat",
+      Data: {
+          User: document.getElementById("usr").value,
+          Text: document.getElementById("msg").value,
+        }
+
+    };
+
+
+    socket.send(JSON.stringify(msg));
+
+    document.getElementById("msg").value = "";
+
+
+};
+
+      </script>
+
+   </head>
+   <body style="background-color:powderblue;">
+    <div class="container">
+
+  <p>   User:   <input id="usr" type="chat" name="Message" value=""> </p>
+
+  <p>   Message: <input id="msg" type="chat" name="Message" value=""> </p>
+
+    <input type="button" value="SEND" onclick="send()">
+  </div>
+
+
+
+   </body>
+</html>
